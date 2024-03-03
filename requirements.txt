@@ -1,0 +1,30 @@
+asgiref==3.7.2
+black==24.1.1
+certifi @ file:///private/tmp/python-certifi-20231211-18102-76ipel/certifi-2023.11.17
+cffi @ file:///private/tmp/cffi-20231014-5567-1hyue8f/cffi-1.16.0
+charset-normalizer==3.3.2
+click==8.1.7
+distlib @ file:///private/tmp/python-distlib-20231212-4938-trhlvy/distlib-0.3.8
+Django==5.0.2
+filelock @ file:///private/tmp/python-filelock-20231112-5622-k62fq8/filelock-3.13.1/dist/filelock-3.13.1-py3-none-any.whl#sha256=57dbda9b35157b05fb3e58ee91448612eb674172fab98ee235ccb0b5bee19a1c
+flake8==7.0.0
+idna==3.6
+iniconfig==2.0.0
+isort==5.13.2
+load-dotenv==0.1.0
+mccabe==0.7.0
+mypy==1.8.0
+mypy-extensions==1.0.0
+packaging @ file:///private/tmp/python-packaging-20231211-10905-adsfgp/packaging-23.2
+pathspec==0.12.1
+platformdirs @ file:///private/tmp/python-platformdirs-20231204-5317-3q4okz/platformdirs-4.1.0
+pluggy==1.4.0
+pycodestyle==2.11.1
+pycparser @ file:///private/tmp/pycparser-20231013-5787-1anpge2/pycparser-2.21
+pyflakes==3.2.0
+pytest==8.0.0
+python-dotenv==1.0.1
+requests==2.31.0
+sqlparse==0.4.4
+typing_extensions==4.9.0
+urllib3==2.2.0
