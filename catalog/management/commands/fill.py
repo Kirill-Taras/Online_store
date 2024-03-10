@@ -61,10 +61,10 @@ class Command(BaseCommand):
                     name=product["fields"]["name"],
                     description=product["fields"]["description"],
                     picture=product["fields"]["picture"],
-                    category=product["fields"]["picture"],
+                    category=Category.objects.get(id=product["fields"]["category"]),
                     price=product["fields"]["price"],
                     created_at=product["fields"]["created_at"],
-                    picupdated_atture=product["fields"]["updated_at"],
+                    updated_at=product["fields"]["updated_at"],
                 )
             )
             )
