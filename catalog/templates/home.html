@@ -30,13 +30,12 @@
                     <h4 class="my-0 font-weight-normal">{{ object.name }}</h4>
                 </div>
                 <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ object.price }} rub</h1>
+                    <h6 class="card-title pricing-card-title">{{ object.description }} </h6>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>- {{ object.description }}</li>
-                        <li>- {{ object.category }}</li>
+<!--                        <li>- {{ object.description }}</li>-->
+<!--                        <li>- {{ object.category }}</li>-->
                     </ul>
-<!--                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Подробнее</button>-->
-                    <a href="{% url 'product/', object.pk %}" type="button"
+                     <a href="{% url 'home/product/'%}" type="button"
                        class="btn btn-lg btn-block btn-outline-primary">Перейти</a>
                 </div>
             </div>
