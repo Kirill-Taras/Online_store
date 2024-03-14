@@ -8,7 +8,7 @@ from catalog.models import Product, Category
 
 def home(request):
     context = {'object_list': Category.objects.all()}
-    return render(request, "home.html", context)
+    return render(request, "catalog/home.html", context)
 
 
 def contacts(request):
@@ -19,11 +19,11 @@ def contacts(request):
         print(
             f"Полученные данные:\nИмя: {name}\nТелефон: {phone}\nСообщение: {message}"
         )
-    return render(request, "contacts.html")
+    return render(request, "catalog/contacts.html")
 
 
 def product(request, pk):
     context = {
         "object_list": Product.objects.get(pk=pk)
     }
-    return render(request, "product.html", context)
+    return render(request, "catalog/product.html", context)
