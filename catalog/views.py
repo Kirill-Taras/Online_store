@@ -24,6 +24,6 @@ def contacts(request):
 
 def product(request, pk):
     context = {
-        "object_list": Product.objects.get(pk=pk)
+        "object_list": Product.objects.filter(category=pk)
     }
     return render(request, "catalog/product.html", context)
