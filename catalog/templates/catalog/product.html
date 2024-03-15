@@ -1,17 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Skystore</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-</head>
-<body>
-{% for object in object_list %}
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
 <div class="row text-center">
-    <h5 class="my-0 mr-md-auto font-weight-normal">{{object.name}}</h5>
-    {% endfor %}
+    <div class="col-4">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ object_list.name }}</h4>
+            </div>
+            <img class="img-fluid img-thumbnail"
+                         src="{{ product.picture|my_media }}" alt="{{ product.name }}">
+            <div class="card-body">
+                <h2 class="card-title pricing-card-title">{{ object_list.price }} rub </h2>
+                <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                    <li>- {{ object_list.description }}</li>
+                    <li>- {{ object_list.category }}</li>
+                </ul>
+                <a href="{% url 'catalog:product_id' object_list.pk %}" type="button"
+                   class="btn btn-lg btn-block btn-outline-primary">Купить</a>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+{% endblock %}
