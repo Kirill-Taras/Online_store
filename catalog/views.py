@@ -1,8 +1,9 @@
 from typing import Any
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, TemplateView
-from catalog.models import Product
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
+from catalog.models import Product, Blog
 
 
 # Create your views here.
@@ -58,3 +59,11 @@ class ProductDetailView(DetailView):
 #         "object_list": Product.objects.get(pk=pk)
 #     }
 #     return render(request, "catalog/product_detail.html", context)
+
+# class BlogCreateView(CreateView):
+#     model = Blog
+#     fields = ("title", "is_published")
+#     success_url = reverse_lazy("catalog:blog)
+
+class BlogListView(ListView):
+    model = Blog
