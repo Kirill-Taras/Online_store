@@ -60,10 +60,11 @@ class ProductDetailView(DetailView):
 #     }
 #     return render(request, "catalog/product_detail.html", context)
 
-# class BlogCreateView(CreateView):
-#     model = Blog
-#     fields = ("title", "is_published")
-#     success_url = reverse_lazy("catalog:blog)
-
 class BlogListView(ListView):
     model = Blog
+
+
+class BlogCreateView(CreateView):
+    model = Blog
+    fields = ("title", "content")
+    success_url = reverse_lazy("catalog:blog_list")
