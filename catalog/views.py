@@ -2,7 +2,7 @@ from typing import Any
 
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from catalog.models import Product, Blog
 
 
@@ -15,24 +15,8 @@ class ProductListView(ListView):
     }
 
 
-# def home(request):
-#     context = {'object_list': Product.objects.all()}
-#     return render(request, "catalog/product_list.html", context)
-
-
 class ContactsView(TemplateView):
     template_name = "catalog/contacts.html"
-
-
-# def contacts(request):
-#     if request.method == "POST":
-#         name = request.POST.get("name")
-#         phone = request.POST.get("phone")
-#         message = request.POST.get("message")
-#         print(
-#             f"Полученные данные:\nИмя: {name}\nТелефон: {phone}\nСообщение: {message}"
-#         )
-#     return render(request, "catalog/contacts.html")
 
 
 class ProductDetailView(DetailView):
@@ -54,17 +38,34 @@ class ProductDetailView(DetailView):
         return context_data
 
 
-# def product(request, pk):
-#     context = {
-#         "object_list": Product.objects.get(pk=pk)
-#     }
-#     return render(request, "catalog/product_detail.html", context)
-
 class BlogListView(ListView):
     model = Blog
+    extra_context = {
+        "title": "Блог о еде"
+    }
 
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ("title", "content")
+    fields = ("title", "content", "preview")
     success_url = reverse_lazy("catalog:blog_list")
+    extra_context = {
+        "title": "Создать новый блог"
+    }
+
+
+class BlogUpdateView(UpdateView):
+    model = Blog
+    fields = ("title", "content", "preview")
+    success_url = reverse_lazy("catalog:blog_list")
+    extra_context = {
+        "title": "Внести изменения в блог"
+    }
+
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    success_url = reverse_lazy("catalog:blog_list")
+    extra_context = {
+        "title": "Удалить блог"
+    }
