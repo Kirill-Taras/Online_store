@@ -47,7 +47,7 @@ class BlogListView(ListView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ("title", "content", "preview")
+    fields = ("title", "content", "preview", "slug")
     success_url = reverse_lazy("catalog:blog_list")
     extra_context = {
         "title": "Создать новый блог"
@@ -56,7 +56,7 @@ class BlogCreateView(CreateView):
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ("title", "content", "preview")
+    fields = ("title", "content", "preview", "slug")
     success_url = reverse_lazy("catalog:blog_list")
     extra_context = {
         "title": "Внести изменения в блог"
@@ -69,3 +69,22 @@ class BlogDeleteView(DeleteView):
     extra_context = {
         "title": "Удалить блог"
     }
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+
+    def get_queryset(self):  #-> Product.query.QuerySet[_M]
+        queryset = super().get_queryset()
+        queryset = queryset.filter(pk=self.kwargs.get("pk"))
+
+        return queryset
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+
+        product_item = Blog.objects.get(pk=self.kwargs.get("pk"))
+        context_data["pk"] = product_item.pk
+        context_data["title"] = f'Подробно о {product_item.title}'
+
+        return context_data
