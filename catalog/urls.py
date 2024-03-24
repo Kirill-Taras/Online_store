@@ -13,5 +13,4 @@ urlpatterns = [
     path("blog/<int:pk>/update/", BlogUpdateView.as_view(), name="blog_update"),
     path("blog/<int:pk>/delete/", BlogDeleteView.as_view(), name="blog_delete"),
     path("blog/<int:pk>/detail/", BlogDetailView.as_view(), name="blog_detail"),
-
 ]
