@@ -1,29 +1,146 @@
-from django.shortcuts import render
+from typing import Any
 
-from catalog.models import Product
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
+from pytils.translit import slugify
+
+from catalog.models import Product, Blog
 
 
 # Create your views here.
 
+class ProductListView(ListView):
+    model = Product
 
-def home(request):
-    context = {'object_list': Product.objects.all()}
-    return render(request, "catalog/home.html", context)
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Все продукты"
 
-
-def contacts(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        message = request.POST.get("message")
-        print(
-            f"Полученные данные:\nИмя: {name}\nТелефон: {phone}\nСообщение: {message}"
-        )
-    return render(request, "catalog/contacts.html")
+        return context_data
 
 
-def product(request, pk):
-    context = {
-        "object_list": Product.objects.get(pk=pk)
-    }
-    return render(request, "catalog/product.html", context)
+class ContactsView(TemplateView):
+    template_name = "catalog/contacts.html"
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Контакты"
+
+        return context_data
+
+
+class ProductDetailView(DetailView):
+    model = Product
+
+    def get_queryset(self):  #-> Product.query.QuerySet[_M]
+        queryset = super().get_queryset()
+        queryset = queryset.filter(pk=self.kwargs.get("pk"))
+
+        return queryset
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+
+        product_item = Product.objects.get(pk=self.kwargs.get("pk"))
+        context_data["pk"] = product_item.pk
+        context_data["title"] = f'Все о продукте {product_item.name}'
+
+        return context_data
+
+
+class BlogListView(ListView):
+    model = Blog
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Блог о еде"
+
+        return context_data
+
+    def get_queryset(self):  #-> Product.query.QuerySet[_M]
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_published=True)
+
+        return queryset
+
+
+class BlogCreateView(CreateView):
+    model = Blog
+    fields = ("title", "content", "preview", "is_published")
+    # success_url = reverse_lazy("catalog:blog_list")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Создать новый блог"
+
+        return context_data
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.title)
+            new_mat.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("catalog:blog_list")
+
+
+class BlogUpdateView(UpdateView):
+    model = Blog
+    fields = ("title", "content", "preview", "is_published")
+    # success_url = reverse_lazy("catalog:blog_list")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Внести изменения в блог"
+
+        return context_data
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.title)
+            new_mat.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("catalog:blog_list")
+
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    success_url = reverse_lazy("catalog:blog_list")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Удалить блог"
+
+        return context_data
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+
+    def get_queryset(self):  #-> Product.query.QuerySet[_M]
+        queryset = super().get_queryset()
+        queryset = queryset.filter(pk=self.kwargs.get("pk"))
+
+        return queryset
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+
+        product_item = Blog.objects.get(pk=self.kwargs.get("pk"))
+        context_data["pk"] = product_item.pk
+        context_data["title"] = f'Подробно о {product_item.title}'
+
+        return context_data
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        self.object.count_views += 1
+        self.object.save()
+        return self.object
