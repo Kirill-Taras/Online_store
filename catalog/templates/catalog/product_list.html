@@ -10,7 +10,7 @@
             <div class="card-body">
                 <h6 class="card-title pricing-card-title">{{ object.description | truncatewords:100 }} </h6>
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3"></ul>
-                <a href="{% url 'catalog:product_id' object.pk %}" type="button"
+                <a href="{% url 'catalog:product_detail' object.pk %}" type="button"
                    class="btn btn-lg btn-block btn-outline-primary">Перейти</a>
             </div>
         </div>
