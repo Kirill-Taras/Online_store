@@ -4,6 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
+from catalog.forms import ProductForm
 from catalog.models import Product, Blog
 
 
@@ -20,7 +21,7 @@ class ProductListView(ListView):
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = ("name", "category", "price", "picture", "description")
+    form_class = ProductForm
 
     def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
         context_data = super().get_context_data(*args, **kwargs)
