@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 NULLABLE = {'blank': True, 'null': True}
@@ -23,8 +24,8 @@ class Product(models.Model):
     picture = models.ImageField(upload_to='products/', verbose_name='Изображение', **NULLABLE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     price = models.IntegerField(verbose_name='Цена за покупку')
-    created_at = models.DateTimeField(verbose_name='Дата создания')
-    updated_at = models.DateTimeField(verbose_name='Дата последнего изменения')
+    created_at = models.DateTimeField(verbose_name='Дата создания', default=datetime.now())
+    updated_at = models.DateTimeField(verbose_name='Дата последнего изменения', default=datetime.now())
 
     def __str__(self):
         return f'{self.name}'

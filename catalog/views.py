@@ -8,15 +8,53 @@ from catalog.models import Product, Blog
 
 
 # Create your views here.
+class ContactsView(TemplateView):
+    template_name = "catalog/contacts.html"
+    extra_context = {"title": "Контакты"}
+
 
 class ProductListView(ListView):
     model = Product
     extra_context = {"title": "Все продукты"}
 
 
-class ContactsView(TemplateView):
-    template_name = "catalog/contacts.html"
-    extra_context = {"title": "Контакты"}
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ("name", "category", "price", "picture", "description")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Создать новый продукт"
+
+        return context_data
+
+    def get_success_url(self):
+        return reverse("catalog:product_list")
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ("name", "category", "price", "picture", "description")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Внести изменения в продукт"
+
+        return context_data
+
+    def get_success_url(self):
+        return reverse("catalog:product_list")
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy("catalog:product_list")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Удалить продукт"
+
+        return context_data
 
 
 class ProductDetailView(DetailView):
