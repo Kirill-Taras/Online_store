@@ -11,22 +11,12 @@ from catalog.models import Product, Blog
 
 class ProductListView(ListView):
     model = Product
-
-    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
-        context_data = super().get_context_data(*args, **kwargs)
-        context_data["title"] = "Все продукты"
-
-        return context_data
+    extra_context = {"title": "Все продукты"}
 
 
 class ContactsView(TemplateView):
     template_name = "catalog/contacts.html"
-
-    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
-        context_data = super().get_context_data(*args, **kwargs)
-        context_data["title"] = "Контакты"
-
-        return context_data
+    extra_context = {"title": "Контакты"}
 
 
 class ProductDetailView(DetailView):
@@ -34,7 +24,6 @@ class ProductDetailView(DetailView):
 
     def get_queryset(self):  #-> Product.query.QuerySet[_M]
         queryset = super().get_queryset()
-        queryset = queryset.filter(pk=self.kwargs.get("pk"))
 
         return queryset
 
@@ -50,12 +39,7 @@ class ProductDetailView(DetailView):
 
 class BlogListView(ListView):
     model = Blog
-
-    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
-        context_data = super().get_context_data(*args, **kwargs)
-        context_data["title"] = "Блог о еде"
-
-        return context_data
+    extra_context = {"title": "Блог о еде"}
 
     def get_queryset(self):  #-> Product.query.QuerySet[_M]
         queryset = super().get_queryset()
@@ -67,7 +51,6 @@ class BlogListView(ListView):
 class BlogCreateView(CreateView):
     model = Blog
     fields = ("title", "content", "preview", "is_published")
-    # success_url = reverse_lazy("catalog:blog_list")
 
     def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
         context_data = super().get_context_data(*args, **kwargs)
@@ -77,7 +60,7 @@ class BlogCreateView(CreateView):
 
     def form_valid(self, form):
         if form.is_valid():
-            new_mat = form.save()
+            new_mat = form.save(commit=False)
             new_mat.slug = slugify(new_mat.title)
             new_mat.save()
 
@@ -90,7 +73,6 @@ class BlogCreateView(CreateView):
 class BlogUpdateView(UpdateView):
     model = Blog
     fields = ("title", "content", "preview", "is_published")
-    # success_url = reverse_lazy("catalog:blog_list")
 
     def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
         context_data = super().get_context_data(*args, **kwargs)
@@ -100,7 +82,7 @@ class BlogUpdateView(UpdateView):
 
     def form_valid(self, form):
         if form.is_valid():
-            new_mat = form.save()
+            new_mat = form.save(commit=False)
             new_mat.slug = slugify(new_mat.title)
             new_mat.save()
 
