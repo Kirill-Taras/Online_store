@@ -1,22 +1,79 @@
 from typing import Any
 
+from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
-from catalog.models import Product, Blog
+from catalog.forms import ProductForm, VersionForm
+from catalog.models import Product, Blog, Version
 
 
 # Create your views here.
+class ContactsView(TemplateView):
+    template_name = "catalog/contacts.html"
+    extra_context = {"title": "Контакты"}
+
 
 class ProductListView(ListView):
     model = Product
     extra_context = {"title": "Все продукты"}
 
 
-class ContactsView(TemplateView):
-    template_name = "catalog/contacts.html"
-    extra_context = {"title": "Контакты"}
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Создать новый продукт"
+
+        return context_data
+
+    def get_success_url(self):
+        return reverse("catalog:product_list")
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Внести изменения в продукт"
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == 'POST':
+            formset = VersionFormset(self.request.POST, instance=self.object)
+        else:
+            formset = VersionFormset(instance=self.object)
+        context_data['formset'] = formset
+
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        self.object = form.save()
+
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+
+        return super().form_valid()
+
+    def get_success_url(self):
+        return reverse("catalog:product_list")
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy("catalog:product_list")
+
+    def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["title"] = "Удалить продукт"
+
+        return context_data
 
 
 class ProductDetailView(DetailView):
