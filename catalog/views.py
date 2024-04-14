@@ -59,7 +59,7 @@ class ProductUpdateView(UpdateView):
             formset.instance = self.object
             formset.save()
 
-        return super().form_valid()
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse("catalog:product_list")
@@ -90,6 +90,8 @@ class ProductDetailView(DetailView):
         product_item = Product.objects.get(pk=self.kwargs.get("pk"))
         context_data["pk"] = product_item.pk
         context_data["title"] = f'Все о продукте {product_item.name}'
+        activ_version = product_item.version_set.filter(current_indicator=True).first()
+        context_data["activ_version"] = activ_version
 
         return context_data
 
