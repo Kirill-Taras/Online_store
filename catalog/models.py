@@ -59,6 +59,7 @@ class Version(models.Model):
     number = models.IntegerField(verbose_name="Номер версии")
     name = models.CharField(max_length=60, verbose_name="Название версии")
     current_indicator = models.BooleanField(verbose_name="Признак текущей версии")
+    verification_code = models.CharField(max_length=9, verbose_name="Код верификации", **NULLABLE)
 
     class Meta:
         verbose_name = 'Версия'
