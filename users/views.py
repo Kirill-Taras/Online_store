@@ -36,7 +36,7 @@ class RegisterUserView(CreateView):
 
         message = (f'Вы успешно зарегистрировались. '
                    f'Для завершения процесса перейдите по ссылке http://{current_site}/users/confirm/'
-                   f'и введите код верификации {verification_code}')
+                   f' и введите код верификации {verification_code}')
         user.save()
 
         send_mail(
@@ -69,3 +69,5 @@ class ConfirmRegisterView(TemplateView):
             user.save()
             return redirect('users:login')
         return redirect('catalog:product_list')
+
+

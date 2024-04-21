@@ -9,6 +9,10 @@
         {% else %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'users:register' %}">Регистрация</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Войти</a>
+
         {% endif %}
     </nav>
+    {% if user.is_authenticated %}
+    <h5 class="my-0 mr-md-auto font-weight-normal">Вы зашли: {{ user.email }}</h5>
+    {% endif %}
 </div>

@@ -1,5 +1,7 @@
 from typing import Any
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
@@ -20,7 +22,7 @@ class ProductListView(ListView):
     extra_context = {"title": "Все продукты"}
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
 
@@ -33,8 +35,12 @@ class ProductCreateView(CreateView):
     def get_success_url(self):
         return reverse("catalog:product_list")
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
 
@@ -65,7 +71,7 @@ class ProductUpdateView(UpdateView):
         return reverse("catalog:product_list")
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy("catalog:product_list")
 
@@ -76,7 +82,7 @@ class ProductDeleteView(DeleteView):
         return context_data
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
     def get_queryset(self):  #-> Product.query.QuerySet[_M]

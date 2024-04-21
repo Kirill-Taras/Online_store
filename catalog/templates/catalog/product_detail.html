@@ -14,7 +14,12 @@
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                     <li>- {{ object.description }}</li>
                     <li>- {{ object.category }}</li>
-                    <li>- {{ object.category }}</li>
+                    <li>{% if object.owner %}
+                        <a>Avtor {{ object.owner }}</a>
+                        {% else %}
+                        <a>Нет avtora</a>
+                        {% endif %}
+                    </li>
                     <li>Версия: {% if activ_version %}
                         <a>Текущая версия: {{ activ_version.number }} ({{ activ_version.name }})</a>
                         {% else %}
