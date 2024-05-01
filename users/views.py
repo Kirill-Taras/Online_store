@@ -43,7 +43,7 @@ class RegisterUserView(CreateView):
             subject=subjet,
             message=message,
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email,]
+            recipient_list=[user.email, ]
         )
         user.save()
         
