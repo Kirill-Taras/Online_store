@@ -136,6 +136,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 
 EMAIL_HOST_USER = 'kirilltaras1792@yandex.ru'
 EMAIL_HOST_PASSWORD = 'loxvtbosiyiladlg'

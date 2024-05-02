@@ -3,9 +3,9 @@ from typing import Any
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 
-from users.forms import UserRegisterForm
+from users.forms import UserRegisterForm, UserForm
 from users.models import User
 from django.conf import settings
 from django.core.mail import send_mail
@@ -16,7 +16,7 @@ class RegisterUserView(CreateView):
     form_class = UserRegisterForm
 
     def get_success_url(self):
-        return reverse_lazy("catalog:product_list")
+        return reverse_lazy("users:confirm")
 
     def get_context_data(self, *args, **kwargs: Any) -> dict[str, Any]:
         context_data = super().get_context_data(*args, **kwargs)
@@ -65,9 +65,17 @@ class ConfirmRegisterView(TemplateView):
         user = get_object_or_404(User, verification_code=verification_code)
 
         if user:
-            user.is_activ = True
+            user.is_active = True
             user.save()
             return redirect('users:login')
         return redirect('catalog:product_list')
 
+
+class UserUpdateView(UpdateView):
+    model = User
+    success_url = reverse_lazy('users:profile')
+    form_class = UserForm
+
+    def get_object(self, queryset=None):
+        return self.request.user
 

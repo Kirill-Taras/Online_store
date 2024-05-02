@@ -1,20 +1,31 @@
 {% extends 'catalog/base.html' %}
 {% block content%}
-<form method="POST" enctype="multipart/form-data">
-    <div class="row text-center">
-        <div class="col-4">
-            <div class="card">
-                <div class="card-header mb-4">
-                    Регистрация
-                </div>
-                {% csrf_token %}
-                {{ form.as_p }}
-                <a type="button"
-                   href="{% url 'catalog:product_list' %}"
-                   class="btn btn-lg btn-block btn-outline-primary mb-4 w-50">Отменить</a>
-                <button type="submit" class="btn btn-lg btn-block btn-outline-primary w-50">Выполнить</button>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                {% if user.is_authenticated %}
+                My profile
+                {% else %}
+                Registration
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a type="button"
+                       href="{% url 'catalog:product_list' %}"
+                       class="btn btn-success">Отменить</a>
+                <form/>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-danger">Сгенерировать пароль</a>
             </div>
         </div>
     </div>
-</form>
+</div>
 {% endblock %}
+
