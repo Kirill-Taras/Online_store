@@ -15,10 +15,12 @@
             <div class="card-body">
                 <h6 class="card-title pricing-card-title">{{ object.description | truncatewords:100 }} </h6>
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3"></ul>
+                {% if perms.catalog.set_published_product and perms.change_description_product and perms.change_category_product or user == object.owner %}
+                 <a type="button"
+                   href="{% url 'catalog:product_update' object.pk %}" class="btn btn-lg btn-block btn-outline-primary">Изменить</a>
+                {% endif %}
                 <a href="{% url 'catalog:product_detail' object.pk %}" type="button"
                    class="btn btn-lg btn-block btn-outline-primary">Перейти</a>
-                <a type="button"
-                   href="{% url 'catalog:product_update' object.pk %}" class="btn btn-lg btn-block btn-outline-primary">Изменить</a>
                    <a type="button"
                    href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-lg btn-block btn-outline-primary">Удалить</a>
             </div>

@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Blog, Version
 
 
@@ -69,6 +69,17 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("catalog:product_list")
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if (user.has_perm('catalog.set_published_product') and
+                user.has_perm('catalog.change_description_product') and
+                user.has_perm('catalog.change_category_product')):
+            return ProductModeratorForm
+        else:
+            raise PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
