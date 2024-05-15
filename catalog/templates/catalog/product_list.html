@@ -1,0 +1,31 @@
+{% extends 'catalog/base.html' %}
+{% block content%}
+<div class="row text-center">
+    <div class="col-12">
+        <a href="{% url 'catalog:product_create' %}" class="btn btn-lg btn-block btn-outline-primary mb-3">Создать продукт</a>
+    </div>
+</div>
+<div class="row text-center">
+    {% for object in object_list %}
+    <div class="col-4">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ object.name }}</h4>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title pricing-card-title">{{ object.description | truncatewords:100 }} </h6>
+                <ul class="list-unstyled mt-3 mb-4 text-start m-3"></ul>
+                {% if perms.catalog.set_published_product and perms.change_description_product and perms.change_category_product or user == object.owner %}
+                 <a type="button"
+                   href="{% url 'catalog:product_update' object.pk %}" class="btn btn-lg btn-block btn-outline-primary">Изменить</a>
+                {% endif %}
+                <a href="{% url 'catalog:product_detail' object.pk %}" type="button"
+                   class="btn btn-lg btn-block btn-outline-primary">Перейти</a>
+                   <a type="button"
+                   href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-lg btn-block btn-outline-primary">Удалить</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

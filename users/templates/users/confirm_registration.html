@@ -1,0 +1,21 @@
+{% extends 'catalog/base.html' %}
+{% block content%}
+<div class="card-header mb-4">
+    Регистрация
+    <form method="POST" action="{% url 'users:confirm' %}">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <label for="verification_code" class="form-label">Код верификации</label>
+                        <input type="text" id="verification_code" name="verification_code" class="form-control mb-3">
+                        <br>
+                        <button type="submit" class="btn btn-dark">Подтвердить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
